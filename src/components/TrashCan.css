@@ -48,9 +48,13 @@
   width: 100%;
   height: 300px;
   -webkit-app-region: no-drag;  /* Make canvas NOT draggable */
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  overflow: hidden;
 }
 
 .trash-canvas canvas {
   width: 100%;
   height: 100%;
+  display: block;
 }
