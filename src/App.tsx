@@ -5,18 +5,15 @@ import BuddyOverlay from './pages/BuddyOverlay';
 
 function App() {
   return (
-    <>
-    <BuddyOverlay />
 
     <Router>
       <Routes>
         <Route path="/notepad" element={<NotepadPage />} />
         <Route path="/trash" element={<TrashPage />} />
-        {/* <Route path="/buddy" element={<BuddyOverlay />} /> */}
+        <Route path="/buddy" element={<BuddyOverlay />} />
         <Route path="/" element={<div>Loading...</div>} />
       </Routes>
     </Router>
-    </>
   );
 }
 

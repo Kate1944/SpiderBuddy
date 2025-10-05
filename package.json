@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "@11labs/client": "^0.2.0",
+    "@elevenlabs/client": "^0.7.1",
+    "elevenlabs": "^1.59.0",
     "framer-motion": "^12.23.22",
     "lucide-react": "^0.544.0",
     "matter-js": "^0.20.0",

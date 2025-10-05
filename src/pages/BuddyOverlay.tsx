@@ -1,63 +1,89 @@
-import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
-import { motion } from 'framer-motion';
-import Avatar from '../components/Buddy';
-// import TaskList from '../components/TaskList';
-// import { useTasks } from '../hooks/useTasks';
+import { useEffect, useRef } from 'react';
+import Notepad from '../components/Notepad';
 
-export default function BuddyOverlay() {
-  const [showTaskList, setShowTaskList] = useState(false);
-  const [avatarMood, setAvatarMood] = useState('happy');
-  
-  // const { tasks, addTask, toggleTask, deleteTask, incompleteCount } = useTasks();
+const BuddyOverlay = () => {
+  const widgetContainerRef = useRef<HTMLDivElement>(null);
 
-  // const handleAddTask = (text) => {
-  //   addTask(text);
-  //   setAvatarMood('excited');
-  //   setTimeout(() => setAvatarMood('happy'), 2000);
-  // };
+  useEffect(() => {
+    // Load ElevenLabs Convai Widget script
+    const script = document.createElement('script');
+    script.src = 'https://elevenlabs.io/convai-widget/index.js';
+    script.async = true;
+    document.body.appendChild(script);
 
-  // const handleToggleTask = (id) => {
-  //   toggleTask(id);
-  //   const task = tasks.find(t => t.id === id);
-  //   if (!task.completed) {
-  //     setAvatarMood('excited');
-  //     setTimeout(() => setAvatarMood('happy'), 2000);
-  //   }
-  // };
+    script.onload = () => {
+      if (widgetContainerRef.current && (window as any).ElevenLabsConvai) {
+        const widget = (window as any).ElevenLabsConvai;
+        widget.init({
+          agentId: 'agent_6601k6rkq328fjh80dfvcz3y4ea6',
+        });
+      }
+    };
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none">
-      {/* Avatar - Bottom Center */}
-      <motion.div 
-        // className="fixed bottom-8 right-8 pointer-events-auto" //Bottom right
-        className="fixed bottom-8 left-1/2 -translate-x-1/2 pointer-events-auto"
-        initial={{ scale: 0, rotate: -180 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ type: "spring", duration: 0.8 }}
-      >
-        <div className="relative">
-          <Avatar 
-            mood={avatarMood}
-            onClick={() => setShowTaskList(!showTaskList)}
-            // taskCount={incompleteCount}
-  
-          />
+    <div className="flex flex-col h-screen bg-gradient-to-br from-purple-50 to-blue-50">
+      {/* Header */}
+      <div className="flex items-center justify-between p-4 bg-white shadow-sm">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => window.location.hash = '#/notepad'}
+            className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+            aria-label="Back to notepad"
+          >
+            <svg
+              className="w-6 h-6 text-gray-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              /></svg>
+          </button>
+          <h1 className="text-2xl font-bold text-gray-800">Buddy Assistant</h1>
         </div>
-      </motion.div>
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+          <span className="text-sm text-gray-600">Online</span>
+        </div>
+      </div>
 
-      {/* Task List Panel */}
-      <AnimatePresence>
-        {/* {showTaskList && (
-          <TaskList
-            tasks={tasks}
-            onAddTask={handleAddTask}
-            onToggleTask={handleToggleTask}
-            onDeleteTask={deleteTask}
-            onClose={() => setShowTaskList(false)}
-          />
-        )} */}
-      </AnimatePresence>
+      {/* Chat Container */}
+      <div className="flex-1 flex items-center justify-center p-6">
+        <div className="w-full max-w-4xl h-full bg-white rounded-2xl shadow-xl overflow-hidden">
+          {/* Widget Container */}
+          <div
+            ref={widgetContainerRef}
+            id="elevenlabs-convai-widget"
+            className="w-full h-full flex items-center justify-center"
+          >
+            {/* Loading state */}
+            <div className="text-center">
+              <div className="inline-block w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+              <p className="text-gray-600">Loading Buddy Assistant...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="p-4 bg-white border-t border-gray-200">
+        <p className="text-center text-sm text-gray-500">
+          Powered by ElevenLabs Conversational AI
+        </p>
+      </div>
     </div>
   );
-}
+};
+
+export default BuddyOverlay;

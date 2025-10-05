@@ -1,11 +1,103 @@
-body {
-  background: transparent;
-  margin: 0;
-  overflow: hidden;
-  -webkit-app-region: no-drag;
+/* TextAvatar.css */
+.text-avatar-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 20px;
 }
 
-/* Make interactive elements receive clicks */
-button, input, .pointer-events-auto {
-  -webkit-app-region: no-drag;
+.avatar {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.avatar-circle {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease;
+}
+
+.avatar.thinking .avatar-circle {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  background: rgba(255,255,255,0.95);
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+.message {
+  margin-bottom: 12px;
+  display: flex;
+}
+
+.message.user {
+  justify-content: flex-end;
+}
+
+.message.assistant {
+  justify-content: flex-start;
+}
+
+.message-content {
+  max-width: 70%;
+  padding: 10px 15px;
+  border-radius: 18px;
+  word-wrap: break-word;
+}
+
+.message.user .message-content {
+  background: #6366f1;
+  color: white;
+}
+
+.message.assistant .message-content {
+  background: #e5e7eb;
+  color: #1f2937;
+}
+
+.input-container {
+  display: flex;
+  gap: 10px;
+}
+
+.input-container input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 25px;
+  font-size: 14px;
+  background: white;
+}
+
+.input-container button {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 25px;
+  background: #6366f1;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.input-container button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
