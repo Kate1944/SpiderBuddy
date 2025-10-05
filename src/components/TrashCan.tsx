@@ -119,7 +119,7 @@ function TrashCan() {
       onDrop={handleDrop}
     >
       <div className="trash-header">
-        <h3>í·‘ï¸ Trash</h3>
+        <h3>ï¿½ï¿½ï¿½ï¸ Trash</h3>
         <div className="score">Score: {score}</div>
       </div>
       <div ref={canvasRef} className="trash-canvas" />
