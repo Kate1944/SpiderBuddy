@@ -3,6 +3,7 @@ const path = require('path');
 
 let notepadWindow;
 let trashWindow;
+let BuddyWindow;
 
 function createWindows() {
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -13,7 +14,7 @@ function createWindows() {
     height: 450,
     x: 20,
     y: 20,
-    alwaysOnTop: true,
+    //alwaysOnTop: true,
     frame: false,
     transparent: true,
     resizable: false,
@@ -30,7 +31,24 @@ function createWindows() {
     height: 380,
     x: width - 290,
     y: height - 400,
-    alwaysOnTop: true,
+    //alwaysOnTop: true,
+    frame: false,
+    transparent: true,
+    resizable: false,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+      preload: path.join(__dirname, 'preload.cjs')
+    }
+  });
+
+  //Create Buddy Overlay Window (center)
+  BuddyWindow = new BrowserWindow({
+    width: 300,
+    height: 300,
+    x: (width - 300) / 2,
+    y: (height - 300) / 2,
+    // alwaysOnTop: true,
     frame: false,
     transparent: true,
     resizable: false,
@@ -44,10 +62,12 @@ function createWindows() {
   // Load different URLs for each window
   notepadWindow.loadURL('http://localhost:5173/#/notepad');
   trashWindow.loadURL('http://localhost:5173/#/trash');
+  BuddyWindow.loadURL('http://localhost:5173/#/buddy');
 
   // Open DevTools for debugging
   notepadWindow.webContents.openDevTools({ mode: 'detach' });
   trashWindow.webContents.openDevTools({ mode: 'detach' });
+  BuddyWindow.webContents.openDevTools({ mode: 'detach' });
 }
 
 // Handle task dropped - forward from Notepad to Trash
