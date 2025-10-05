@@ -1,0 +1,11 @@
+body {
+  background: transparent;
+  margin: 0;
+  overflow: hidden;
+  -webkit-app-region: no-drag;
+}
+
+/* Make interactive elements receive clicks */
+button, input, .pointer-events-auto {
+  -webkit-app-region: no-drag;
+}
