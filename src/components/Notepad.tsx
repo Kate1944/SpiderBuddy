@@ -6,9 +6,16 @@ interface Task {
   text: string;
 }
 
-function Notepad() {
-  const [tasks, setTasks] = useState<Task[]>([]);
+interface NotepadProps {
+  onTaskDropped?: (taskId: string) => void;
+}
+
+function Notepad({ onTaskDropped }: NotepadProps) {
+  const [taskLists, setTaskLists] = useState<Task[][]>([[]]); // Array of lists
+  const [currentListIndex, setCurrentListIndex] = useState(0);
   const [inputValue, setInputValue] = useState('');
+
+  const currentTasks = taskLists[currentListIndex] || [];
 
   const addTask = () => {
     if (inputValue.trim()) {
@@ -16,7 +23,10 @@ function Notepad() {
         id: Date.now().toString(),
         text: inputValue.trim()
       };
-      setTasks([...tasks, newTask]);
+      
+      const updatedLists = [...taskLists];
+      updatedLists[currentListIndex] = [...currentTasks, newTask];
+      setTaskLists(updatedLists);
       setInputValue('');
     }
   };
@@ -27,20 +37,32 @@ function Notepad() {
     }
   };
 
-  const handleDragStart = (e: React.DragEvent, taskId: string) => {
+  const handleDragStart = (e: React.DragEvent) => {
+    // Drag the entire list
+    const listId = `list-${currentListIndex}-${Date.now()}`;
     e.dataTransfer.effectAllowed = 'move';
-    e.dataTransfer.setData('text/plain', taskId);
-    console.log('Dragging task:', taskId);
+    e.dataTransfer.setData('text/plain', listId);
+    console.log('Dragging entire list:', listId);
   };
 
-  const deleteTask = (taskId: string) => {
-    setTasks(tasks.filter(t => t.id !== taskId));
+  const handleDragEnd = (e: React.DragEvent) => {
+    // Check if drop was successful
+    if (e.dataTransfer.dropEffect === 'move') {
+      // Notify parent
+      if (onTaskDropped) {
+        onTaskDropped(`list-${currentListIndex}`);
+      }
+      
+      // Create new empty list and switch to it
+      setTaskLists([...taskLists, []]);
+      setCurrentListIndex(taskLists.length);
+    }
   };
 
   return (
     <div className="notepad">
       <div className="notepad-header">
-        <h3>í³ Tasks</h3>
+        <h3>ğŸ“ Tasks</h3>
       </div>
       
       <div className="notepad-input">
@@ -54,24 +76,26 @@ function Notepad() {
         <button onClick={addTask}>+</button>
       </div>
 
-      <div className="task-list">
-        {tasks.map(task => (
-          <div
-            key={task.id}
-            className="task-item"
-            draggable
-            onDragStart={(e) => handleDragStart(e, task.id)}
-          >
-            <span className="task-drag-handle">â‹®â‹®</span>
-            <span className="task-text">{task.text}</span>
-            <button 
-              className="delete-btn"
-              onClick={() => deleteTask(task.id)}
-            >
-              Ã—
-            </button>
-          </div>
-        ))}
+      <div
+        className="task-list-wrapper"
+        draggable={currentTasks.length > 0}
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="task-list">
+          {currentTasks.length === 0 ? (
+            <div className="empty-state">Add tasks above to get started</div>
+          ) : (
+            currentTasks.map(task => (
+              <div key={task.id} className="task-item">
+                <span className="task-text">{task.text}</span>
+              </div>
+            ))
+          )}
+        </div>
+        {currentTasks.length > 0 && (
+          <div className="drag-hint">ğŸ‘† Drag entire list to trash</div>
+        )}
       </div>
     </div>
   );

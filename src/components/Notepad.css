@@ -63,24 +63,39 @@
   background: #764ba2;
 }
 
+.task-list-wrapper {
+  -webkit-app-region: no-drag;
+  cursor: grab;
+  transition: all 0.2s;
+}
+
+.task-list-wrapper:active {
+  cursor: grabbing;
+  opacity: 0.8;
+}
+
+.task-list-wrapper[draggable="true"]:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
 .task-list {
-  max-height: 400px;
+  max-height: 300px;
   overflow-y: auto;
   padding: 8px;
-  -webkit-app-region: no-drag;
-   -ms-overflow-style: none;
+  -ms-overflow-style: none;
   scrollbar-width: none;
 }
 
-/* Hide scrollbar for Chrome, Safari and Opera */
 .task-list::-webkit-scrollbar {
   display: none;
 }
 
-/* Hide scrollbar for IE, Edge and Firefox */
-.task-list {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #999;
+  font-size: 14px;
+  font-style: italic;
 }
 
 .task-item {
@@ -92,24 +107,8 @@
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  cursor: move;
   transition: all 0.2s;
-}
-
-.task-item:hover {
-  background: #f8f8ff;
-  border-color: #667eea;
-  transform: translateX(4px);
-}
-
-.task-drag-handle {
-  color: #999;
-  font-size: 16px;
-  cursor: grab;
-}
-
-.task-drag-handle:active {
-  cursor: grabbing;
+  pointer-events: none; /* Can't interact with individual tasks */
 }
 
 .task-text {
@@ -118,20 +117,11 @@
   color: #333;
 }
 
-.delete-btn {
-  width: 24px;
-  height: 24px;
-  border: none;
-  background: #ff4444;
-  color: white;
-  border-radius: 4px;
-  font-size: 18px;
-  cursor: pointer;
-  line-height: 1;
-  padding: 0;
-  transition: background 0.2s;
-}
-
-.delete-btn:hover {
-  background: #cc0000;
+.drag-hint {
+  text-align: center;
+  padding: 8px;
+  font-size: 12px;
+  color: #667eea;
+  background: rgba(102, 126, 234, 0.1);
+  border-top: 1px solid rgba(102, 126, 234, 0.2);
 }
