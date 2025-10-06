@@ -12,8 +12,8 @@ function createWindows() {
   notepadWindow = new BrowserWindow({
     width: 320,
     height: 450,
-    x: 20,
-    y: 20,
+    x: -10,
+    y: -15,
     //alwaysOnTop: true,
     frame: false,
     transparent: true,
@@ -23,14 +23,21 @@ function createWindows() {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.cjs')
     }
+  });
+
+  notepadWindow.setMovable(true);
+
+  notepadWindow.on('will-move', (event, bounds) => {
+    const [x, y] = notepadWindow.getPosition();
+    
   });
 
   // Create Trash Window (bottom-right)
   trashWindow = new BrowserWindow({
     width: 270,
     height: 380,
-    x: width - 290,
-    y: height - 400,
+    x: width - 270,
+    y: height - 330,
     //alwaysOnTop: true,
     frame: false,
     transparent: true,
@@ -42,32 +49,17 @@ function createWindows() {
     }
   });
 
-  //Create Buddy Overlay Window (center)
-  BuddyWindow = new BrowserWindow({
-    width: 300,
-    height: 300,
-    x: (width - 300) / 2,
-    y: (height - 300) / 2,
-    // alwaysOnTop: true,
-    frame: false,
-    transparent: true,
-    resizable: false,
-    webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      preload: path.join(__dirname, 'preload.cjs')
-    }
-  });
+  
 
   // Load different URLs for each window
   notepadWindow.loadURL('http://localhost:5173/#/notepad');
   trashWindow.loadURL('http://localhost:5173/#/trash');
-  BuddyWindow.loadURL('http://localhost:5173/#/buddy');
+  // BuddyWindow.loadURL('http://localhost:5173/#/buddy');
 
   // Open DevTools for debugging
   notepadWindow.webContents.openDevTools({ mode: 'detach' });
   trashWindow.webContents.openDevTools({ mode: 'detach' });
-  BuddyWindow.webContents.openDevTools({ mode: 'detach' });
+  // BuddyWindow.webContents.openDevTools({ mode: 'detach' });
 }
 
 // Handle task dropped - forward from Notepad to Trash

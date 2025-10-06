@@ -28,13 +28,14 @@ function NotepadPage() {
   return (
     <>
       <div style={{ 
-        width: '100vw', 
-        height: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        background: 'transparent'
-      }}>
+  width: '100vw', 
+  height: '100vh', 
+  display: 'flex', 
+  alignItems: 'flex-start',
+  justifyContent: 'center',
+  background: 'transparent',
+  paddingTop: '20px'  // Add this
+}}>
         <Notepad 
           onTaskDropped={handleTaskDropped}
           onDragStart={handleDragStart}
